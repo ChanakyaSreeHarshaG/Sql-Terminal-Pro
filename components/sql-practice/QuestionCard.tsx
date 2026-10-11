@@ -12,6 +12,9 @@ interface QuestionCardProps {
   onPrev: () => void;
   onNext: () => void;
   onLoadSolution: (sql: string) => void;
+  isLastOfSection?: boolean;
+  nextSectionLabel?: string;
+  onNextSection?: () => void;
 }
 
 export default function QuestionCard({
@@ -22,6 +25,9 @@ export default function QuestionCard({
   onPrev,
   onNext,
   onLoadSolution,
+  isLastOfSection,
+  nextSectionLabel,
+  onNextSection,
 }: QuestionCardProps) {
   const [showHint, setShowHint] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
@@ -51,6 +57,14 @@ export default function QuestionCard({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleNextClick = () => {
+    if (isLastOfSection && onNextSection) {
+      onNextSection();
+    } else {
+      onNext();
+    }
+  };
+
   return (
     <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
       <div>
@@ -71,7 +85,16 @@ export default function QuestionCard({
             )}
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
+            {isLastOfSection && onNextSection && (
+              <button
+                onClick={onNextSection}
+                className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[11px] font-semibold transition-all cursor-pointer"
+                title="Advance to next section"
+              >
+                <span>Next Section →</span>
+              </button>
+            )}
             <span>{currentIndex + 1} / {totalQuestions}</span>
             <button
               onClick={onPrev}
@@ -82,10 +105,14 @@ export default function QuestionCard({
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
-              onClick={onNext}
-              disabled={currentIndex === totalQuestions - 1}
-              className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-              title="Next Question"
+              onClick={handleNextClick}
+              disabled={!isLastOfSection && currentIndex === totalQuestions - 1}
+              className={`p-1 rounded transition-colors cursor-pointer ${
+                isLastOfSection
+                  ? 'hover:bg-teal-500/20 text-teal-400'
+                  : 'hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed'
+              }`}
+              title={isLastOfSection ? nextSectionLabel || 'Advance to Next Section' : 'Next Question'}
             >
               <ChevronRight className="w-4 h-4" />
             </button>

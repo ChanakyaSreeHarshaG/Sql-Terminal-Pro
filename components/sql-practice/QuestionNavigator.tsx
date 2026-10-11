@@ -18,6 +18,9 @@ interface QuestionNavigatorProps {
   currentIndex: number;
   solvedIds: Set<string>;
   onSelectQuestion: (index: number) => void;
+  isLastOfSection?: boolean;
+  nextSectionLabel?: string;
+  onNextSection?: () => void;
 }
 
 export default function QuestionNavigator({
@@ -25,6 +28,9 @@ export default function QuestionNavigator({
   currentIndex,
   solvedIds,
   onSelectQuestion,
+  isLastOfSection,
+  nextSectionLabel,
+  onNextSection,
 }: QuestionNavigatorProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
@@ -130,18 +136,16 @@ export default function QuestionNavigator({
         </div>
 
         {/* Search Input for questions */}
-        {questions.length > 10 && (
-          <div className="relative mt-2">
-            <Search className="w-3 h-3 text-slate-400 absolute left-2.5 top-2.5" />
-            <input
-              type="text"
-              placeholder="Search by title or #..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-7 pr-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-teal-500"
-            />
-          </div>
-        )}
+        <div className="relative mt-2">
+          <Search className="w-3 h-3 text-slate-400 absolute left-2.5 top-2.5" />
+          <input
+            type="text"
+            placeholder="Search by title or #..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-7 pr-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-teal-500"
+          />
+        </div>
       </div>
 
       {/* Questions Scrollable Body */}
@@ -241,6 +245,11 @@ export default function QuestionNavigator({
                     >
                       {q.title}
                     </p>
+                    {q.category && (
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 font-mono truncate mt-0.5">
+                        {q.category}
+                      </p>
+                    )}
                   </div>
 
                   <div className="shrink-0 flex items-center">
@@ -256,6 +265,18 @@ export default function QuestionNavigator({
           </div>
         )}
       </div>
+
+      {/* Optional Next Section Sticky Bar */}
+      {isLastOfSection && onNextSection && (
+        <div className="p-3 bg-slate-900 border-t border-teal-500/30">
+          <button
+            onClick={onNextSection}
+            className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-extrabold text-xs transition-all shadow-md cursor-pointer"
+          >
+            <span>{nextSectionLabel || 'Continue to Next Section →'}</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -50,6 +50,11 @@ export default function SqlEditor({
           <span className="hidden sm:inline-block text-[11px] text-slate-500 font-mono">
             (Press Ctrl + Enter to run)
           </span>
+          {sql.trim().length > 0 && (
+            <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-teal-400/90 bg-teal-950/40 border border-teal-800/40 ml-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-400 inline-block" /> Auto-saved
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-2">

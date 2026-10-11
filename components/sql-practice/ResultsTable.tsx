@@ -29,6 +29,8 @@ interface ResultsTableProps {
   };
   isLoading: boolean;
   onNextQuestion?: () => void;
+  nextButtonLabel?: string;
+  isSectionComplete?: boolean;
 }
 
 export default function ResultsTable({
@@ -37,6 +39,8 @@ export default function ResultsTable({
   verification,
   isLoading,
   onNextQuestion,
+  nextButtonLabel,
+  isSectionComplete,
 }: ResultsTableProps) {
   const [viewTab, setViewTab] = useState<'user' | 'expected'>('user');
 
@@ -61,7 +65,7 @@ export default function ResultsTable({
     <div className="flex flex-col h-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
       {/* Verification Status Alert */}
       {verification.state === 'correct' && (
-        <div className="px-4 py-3 bg-emerald-500/10 border-b border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between gap-3">
+        <div className="px-4 py-3 bg-emerald-500/10 border-b border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
             <span>{verification.message || '🎉 Perfect! Your query produced the exact expected output.'}</span>
@@ -69,9 +73,13 @@ export default function ResultsTable({
           {onNextQuestion && (
             <button
               onClick={onNextQuestion}
-              className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all text-xs cursor-pointer shadow-xs shrink-0"
+              className={`px-3.5 py-1.5 rounded-lg font-bold transition-all text-xs cursor-pointer shadow-xs shrink-0 flex items-center gap-1.5 ${
+                isSectionComplete
+                  ? 'bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-950 font-extrabold shadow-md'
+                  : 'bg-emerald-600 hover:bg-emerald-500 text-white'
+              }`}
             >
-              Next Question →
+              <span>{nextButtonLabel || 'Next Question →'}</span>
             </button>
           )}
         </div>
