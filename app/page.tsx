@@ -61,6 +61,7 @@ export default function StandaloneSqlTerminalPage() {
 
   const [sqlCode, setSqlCode] = useState<string>('');
   const [queryResult, setQueryResult] = useState<QueryResult | null>(null);
+  const [expectedResult, setExpectedResult] = useState<QueryResult | null>(null);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [engineReady, setEngineReady] = useState<boolean>(false);
   const [engineError, setEngineError] = useState<string | null>(null);
@@ -205,6 +206,28 @@ export default function StandaloneSqlTerminalPage() {
       setQueryResult(null);
     }
   }, [currentQuestion?.id]);
+
+  // Compute expected output table for active challenge
+  useEffect(() => {
+    if (!currentQuestion || !engineReady || !dbInstanceRef.current) {
+      setExpectedResult(null);
+      return;
+    }
+    try {
+      const res = dbInstanceRef.current.exec(currentQuestion.solutionSql);
+      if (res && res.length > 0) {
+        setExpectedResult({
+          columns: res[0].columns,
+          values: res[0].values,
+        });
+      } else {
+        setExpectedResult({ columns: [], values: [] });
+      }
+    } catch (e) {
+      console.error('Failed to compute expected output:', e);
+      setExpectedResult(null);
+    }
+  }, [currentQuestion?.id, currentQuestion?.solutionSql, engineReady, activeDb.id]);
 
   // Unified Run Query & Solution Verification Handler
   const handleExecuteQuery = (customSql?: string) => {
@@ -612,6 +635,7 @@ export default function StandaloneSqlTerminalPage() {
             <div className="min-h-[280px]">
               <ResultsTable
                 result={queryResult}
+                expectedResult={expectedResult}
                 verification={verification}
                 isLoading={isRunning}
                 onNextQuestion={() => setQuestionIndex((prev) => Math.min(filteredQuestions.length - 1, prev + 1))}
