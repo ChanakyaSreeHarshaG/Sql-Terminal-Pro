@@ -230,6 +230,8 @@ export default function ResultsTable({
               )}
             </tbody>
           </table>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-12 text-center text-slate-400 text-xs">
             {isShowingExpected ? (
               <p>No expected output available for this challenge.</p>
             ) : !result ? (
