@@ -1,6 +1,6 @@
 {
   "name": "sql-terminal-pro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "In-Browser SQL Practice Terminal powered by WebAssembly SQLite with 272 practice questions",
   "scripts": {
