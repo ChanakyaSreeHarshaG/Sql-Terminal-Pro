@@ -660,17 +660,10 @@ export default function StandaloneSqlTerminalPage() {
         </div>
 
         {/* Bottom Quick Reference Bar */}
-        <footer className="mt-12 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <footer className="mt-12 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
           <p>
             Client-Side SQLite in WebAssembly · All 272 queries execute locally in your browser with zero latency.
           </p>
-          <div className="flex items-center gap-4 text-[11px] font-mono">
-            <span>Hospital Healthcare DB</span>
-            <span>·</span>
-            <span>Enterprise Northwind DB</span>
-            <span>·</span>
-            <span>20 Master Interview Patterns</span>
-          </div>
         </footer>
       </main>
     </div>
