@@ -381,6 +381,18 @@ export default function StandaloneSqlTerminalPage() {
     }
   };
 
+  // Solved questions isolated per track
+  const solvedStandardCount = useMemo(() => {
+    return SQL_PRACTICE_QUESTIONS.filter((q) => solvedIds.has(q.id)).length;
+  }, [solvedIds]);
+
+  const solvedPatternsCount = useMemo(() => {
+    return PATTERN_QUESTIONS.filter((q) => solvedIds.has(q.id)).length;
+  }, [solvedIds]);
+
+  const currentTrackSolvedCount =
+    practiceMode === 'patterns' ? solvedPatternsCount : solvedStandardCount;
+
   const totalBankQuestions =
     practiceMode === 'patterns' ? PATTERN_QUESTIONS.length : SQL_PRACTICE_QUESTIONS.length;
 
@@ -462,8 +474,12 @@ export default function StandaloneSqlTerminalPage() {
                 <Trophy className="w-4 h-4 text-amber-500" />
                 <span>
                   Solved:{' '}
-                  <strong className="text-teal-400">{solvedIds.size}</strong> /{' '}
+                  <strong className="text-teal-400">{currentTrackSolvedCount}</strong> /{' '}
                   {totalBankQuestions}
+                </span>
+                <span className="text-slate-600 hidden sm:inline">·</span>
+                <span className="text-[11px] text-slate-400 hidden sm:inline" title="Total solved across all tracks">
+                  (Total: <strong className="text-slate-200">{solvedIds.size}</strong>/272)
                 </span>
               </div>
             </div>
@@ -486,11 +502,16 @@ export default function StandaloneSqlTerminalPage() {
                     }}
                     className="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 focus:outline-none focus:ring-1 focus:ring-teal-500 cursor-pointer shadow-xs max-w-[280px] sm:max-w-none"
                   >
-                    {SQL_PATTERNS.map((pat) => (
-                      <option key={pat.id} value={pat.id}>
-                        #{pat.number}. {pat.name} (10 Qs)
-                      </option>
-                    ))}
+                    {SQL_PATTERNS.map((pat) => {
+                      const patSolved = PATTERN_QUESTIONS.filter(
+                        (q) => q.category.startsWith(`Pattern ${pat.number}:`) && solvedIds.has(q.id)
+                      ).length;
+                      return (
+                        <option key={pat.id} value={pat.id}>
+                          #{pat.number}. {pat.name} {patSolved > 0 ? `(${patSolved}/10 Solved)` : '(10 Qs)'}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
 
