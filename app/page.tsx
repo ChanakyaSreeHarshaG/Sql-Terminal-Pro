@@ -432,16 +432,6 @@ export default function StandaloneSqlTerminalPage() {
               SQL Terminal <span className="text-teal-400">Pro</span>
             </span>
           </div>
-
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-slate-400 hidden sm:inline">
-              Client-Side WebAssembly SQLite · 272 Challenges
-            </span>
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs font-mono text-slate-300">
-              <span className={`w-2 h-2 rounded-full ${engineReady ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}`} />
-              <span>{engineReady ? 'Engine Ready' : 'Loading Engine'}</span>
-            </div>
-          </div>
         </div>
       </nav>
 
@@ -660,10 +650,23 @@ export default function StandaloneSqlTerminalPage() {
         </div>
 
         {/* Bottom Quick Reference Bar */}
-        <footer className="mt-12 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
+        <footer className="mt-12 pt-6 border-t border-slate-800 text-center text-xs text-slate-500 space-y-2.5">
           <p>
             Client-Side SQLite in WebAssembly · All 272 queries execute locally in your browser with zero latency.
           </p>
+          <div className="flex items-center justify-center gap-1.5 text-slate-400">
+            <span>Built by</span>
+            <a
+              href="https://chanakyasreeharsha.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-teal-500/80 text-teal-400 hover:text-teal-300 font-medium transition-all shadow-xs group"
+            >
+              <span>💼</span>
+              <span className="group-hover:underline underline-offset-2">Chanakya Sree Harsha</span>
+              <span className="text-[10px] text-slate-500 group-hover:text-teal-400 transition-colors">↗</span>
+            </a>
+          </div>
         </footer>
       </main>
     </div>
