@@ -257,9 +257,14 @@ export default function StandaloneSqlTerminalPage() {
   useEffect(() => {
     if (currentQuestion) {
       const saved = savedUserCodeRef.current[currentQuestion.id];
-      // Only restore if user actually wrote/saved code for this question (ignore auto starterSql)
-      const isAutoStarter = Boolean(currentQuestion.starterSql && saved === currentQuestion.starterSql);
-      if (saved !== undefined && saved.trim() !== '' && !isAutoStarter) {
+      // Only filter out the old broken hospital starter template string
+      const isHospitalStarter = Boolean(
+        currentQuestion.database === 'hospital' &&
+        currentQuestion.starterSql &&
+        saved === currentQuestion.starterSql
+      );
+
+      if (saved !== undefined && saved.trim() !== '' && !isHospitalStarter) {
         setSqlCode(saved);
       } else {
         // Keep editor clean and empty so user can write from scratch
@@ -345,7 +350,7 @@ export default function StandaloneSqlTerminalPage() {
           }
 
           setQueryResult({
-            columns: [],
+            columns: expectedRes && expectedRes.length > 0 ? expectedRes[0].columns : [],
             values: [],
             executionTimeMs: elapsed,
           });

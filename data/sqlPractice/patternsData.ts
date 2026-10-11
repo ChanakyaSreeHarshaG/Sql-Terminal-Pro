@@ -198,12 +198,12 @@ INSERT INTO transactions (txn_id, account_id, txn_date, txn_type, amount) VALUES
 (501, 9001, '2023-09-01', 'Deposit', 5000.00),
 (502, 9001, '2023-09-02', 'Withdrawal', -1200.00),
 (503, 9001, '2023-09-03', 'Deposit', 2500.00),
-(504, 9001, '2023-09-04', 'Withdrawal', -800.00),
+(504, 9001, '2023-09-03', 'Withdrawal', -800.00),
 (505, 9001, '2023-09-05', 'Deposit', 1500.00),
 (506, 9001, '2023-09-06', 'Withdrawal', -3000.00),
 (507, 9001, '2023-09-07', 'Deposit', 4000.00),
 (508, 9002, '2023-09-01', 'Deposit', 10000.00),
-(509, 9002, '2023-09-03', 'Withdrawal', -4500.00),
+(509, 9002, '2023-09-05', 'Withdrawal', -4500.00),
 (510, 9002, '2023-09-05', 'Deposit', 3000.00);
 
 -- 8. Cinema Theater Seats (for Consecutive Available Seats Pattern)

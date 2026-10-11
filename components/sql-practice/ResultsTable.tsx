@@ -230,13 +230,21 @@ export default function ResultsTable({
               )}
             </tbody>
           </table>
-        ) : (
-          <div className="flex flex-col items-center justify-center p-12 text-center text-slate-400 text-xs">
             {isShowingExpected ? (
               <p>No expected output available for this challenge.</p>
             ) : !result ? (
-              <p>Write an SQL query above and click <strong className="text-slate-600 dark:text-slate-200 font-mono">Run Query</strong> (or Ctrl+Enter) to see results. Or click <strong className="text-teal-400 font-mono">Expected Output</strong> above to see what is expected.</p>
-            ) : null}
+              <p>
+                Write an SQL query above and click <strong className="text-slate-600 dark:text-slate-200 font-mono">Run Query</strong> (or Ctrl+Enter) to see results. Or click <strong className="text-teal-400 font-mono">Expected Output</strong> above to see what is expected.
+              </p>
+            ) : (
+              <div className="flex flex-col items-center justify-center text-center py-4">
+                <span className="w-8 h-8 rounded-full bg-slate-800 text-slate-300 font-mono text-xs flex items-center justify-center mb-2 border border-slate-700">0</span>
+                <p className="font-semibold text-slate-300">0 rows returned</p>
+                <p className="text-slate-500 mt-1 max-w-sm">
+                  Your query executed without errors, but returned 0 rows matching the WHERE / HAVING filter.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
