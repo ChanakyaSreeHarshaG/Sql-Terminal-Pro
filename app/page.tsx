@@ -132,7 +132,12 @@ export default function StandaloneSqlTerminalPage() {
     setSqlCode(newCode);
     if (currentQuestion) {
       setSavedUserCode((prev) => {
-        const next = { ...prev, [currentQuestion.id]: newCode };
+        const next = { ...prev };
+        if (newCode.trim()) {
+          next[currentQuestion.id] = newCode;
+        } else {
+          delete next[currentQuestion.id];
+        }
         savedUserCodeRef.current = next;
         try {
           localStorage.setItem('sql_terminal_saved_code', JSON.stringify(next));
@@ -248,16 +253,17 @@ export default function StandaloneSqlTerminalPage() {
     }
   }, [currentQuestion?.id, currentQuestion?.database, activeDb.id]);
 
-  // Restore user's saved query, verified solution if solved, or starter query when question changes
+  // Restore user's typed query when question changes (keeps editor clean if unattempted)
   useEffect(() => {
     if (currentQuestion) {
       const saved = savedUserCodeRef.current[currentQuestion.id];
-      if (saved !== undefined && saved.trim() !== '') {
+      // Only restore if user actually wrote/saved code for this question (ignore auto starterSql)
+      const isAutoStarter = Boolean(currentQuestion.starterSql && saved === currentQuestion.starterSql);
+      if (saved !== undefined && saved.trim() !== '' && !isAutoStarter) {
         setSqlCode(saved);
-      } else if (solvedIds.has(currentQuestion.id) && currentQuestion.solutionSql) {
-        setSqlCode(currentQuestion.solutionSql);
       } else {
-        setSqlCode(currentQuestion.starterSql || '');
+        // Keep editor clean and empty so user can write from scratch
+        setSqlCode('');
       }
       setVerification({ state: 'idle' });
       setQueryResult(null);
@@ -867,7 +873,7 @@ export default function StandaloneSqlTerminalPage() {
                 onRun={() => handleExecuteQuery()}
                 onCheck={() => handleExecuteQuery()}
                 onReset={() => {
-                  handleSqlChange(currentQuestion?.starterSql || '');
+                  handleSqlChange('');
                   setVerification({ state: 'idle' });
                   setQueryResult(null);
                 }}
